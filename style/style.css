@@ -12,10 +12,27 @@ body {
     font-family: pixel;
 }
 
+.flex-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .flex-div {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+}
+
+.flex-div-right {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
 }
 
 /*START PAGE*/
@@ -97,7 +114,6 @@ body {
 }
 
 .health-background {
-    color: #EFDD91;
     background-image: url(../img/cardSlotSide.png);
     background-repeat: no-repeat;
     background-size: contain;
@@ -120,6 +136,26 @@ body {
     margin-right: 5%;
 }
 
+.ability-background {
+    background-color: #452a1b88;
+    color: #EFDD91;
+    width: 20vw;
+    height: 8vw;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8%;
+    margin-right: 1%;
+    margin-left: 1%;
+    padding: 0%;
+    text-align: center;
+    font-size: 90%;
+}
+
+.ability-background p {
+    color: white;
+    font-size: 65%;
+}
+
 .how-to-description-right {
     width: 60%;
     padding: 0%;
@@ -139,4 +175,73 @@ body {
 
 .text-align-right {
     text-align: right;
+}
+
+.tutorial-text {
+    z-index: 2;
+    position: absolute;
+    font-weight: lighter;
+    font-size: 140%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.tutorial-text-before {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.visible {
+    opacity: 1;
+}
+
+.invisible {
+    opacity: 0;
+}
+
+/*GAME*/
+
+/*ID*/
+
+/*CLASS*/
+.active-card {
+    background-image: url(../img/cardSlot.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 10vw;
+    height: 15vw;
+    font-size: 70%;
+}
+
+.active-icon {
+    width: 2vw;
+}
+
+.active-header {
+    width: 80%;
+    margin-left: 13%;
+    margin-top: 1%;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+
+.rarity-rare {
+    color: #2789CD;
+}
+
+.active-sprite {
+    margin-top: 2%;
+    width: 75%;
+}
+
+.active-footer {
+    margin-top: 4vh;
+    margin-right: 1.6vw;
+    display: grid;
+    grid-template-columns: 30% 20% 10% 20% 20%;
+    margin-left: 10%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }

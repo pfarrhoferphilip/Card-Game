@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOW TO PLAY</title>
     <link rel="stylesheet" href="../style/style.css">
+    <script src="../script/howToScript.js" defer></script>
 </head>
 
 <body>
@@ -83,12 +84,43 @@
                 <p class="how-to-description-right">SOME CARDS CAN HAVE ABILITIES THAT ARE EITHER USED WHEN PLACED OR
                     CAN BE MANUALLY ACTIVATED DURING YOUR TURN</p>
             </div>
-            <div>
-                
+            <div class="ability-background">
+                <h4>HEALING MILK</h4>
+                <p>HEALS ALL YOUR ACTIVE CARDS BY 1 HP</p>
             </div>
         </div>
-
     </main>
+
+    <!--CARD DEMO-->
+
+    <h1 class="text-center">WHAT ARE THE <br> <span style="color: #EFDD91;">COMPONENTS</span> OF A CARD?</h1>
+
+    <div class="flex-center">
+        <div style="cursor: pointer;" onmouseenter="showTutorialText(true)" onmouseleave="showTutorialText(false)" class="active-card">
+            <div class="active-header">
+                <h2 style="transform: translateX(-2vw);" class="tutorial-text">NAME</h2>
+                <h2 class="rarity-rare tutorial-text-before">COW</h2>
+                <div class="flex-div-right">
+                    <h2 class="tutorial-text-before">5</h2>
+                    <img class="active-icon tutorial-text-before" src="../img/orb.png" alt="Orb">
+                    <h2 style="transform: translateY(-0.5vh);" class="tutorial-text">COST</h2>
+                </div>
+            </div>
+            <div class="flex-center">
+                <img class="active-sprite tutorial-text-before" src="../img/cow01.png" alt="COW">
+                <h2 class="tutorial-text">SPRITE</h2>
+            </div>
+            <div class="active-footer">
+                <img class="active-icon tutorial-text-before" src="../img/heartIcon.png">
+                <h2 class="tutorial-text-before">5</h2>
+                <h2 style="transform: translateX(0.5vw);" class="tutorial-text">HP</h2>
+                <p></p>
+                <h2 class="tutorial-text-before">5</h2>
+                <img class="active-icon tutorial-text-before" src="../img/swordIcon.png">
+                <h2 style="transform: translateX(5vw);" class="tutorial-text">DMG</h2>
+            </div>
+        </div>
+    </div>
 
 </body>
 
