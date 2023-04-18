@@ -5,6 +5,7 @@
 
 html {
     color-scheme: dark;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -17,6 +18,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.flex-center-no-width {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 18%;
 }
 
 .flex-div {
@@ -68,7 +76,24 @@ body {
 
 /*HOW TO PLAY*/
 
+/*ANIMATIONS*/
+@keyframes fade-grow-in {
+    0% {
+        opacity: 0;
+        transform: scale(0%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(100%);
+    }
+}
+
 /*ID*/
+#how-to-body {
+    padding: 2vw;
+}
+
 #how-to-title {
     color: #EFDD91;
     text-align: center;
@@ -81,7 +106,56 @@ body {
     grid-template-columns: auto auto;
 }
 
+#scroll-up {
+    background-color: white;
+    position: fixed;
+    width: 7vw;
+    right: 1vw;
+    bottom: 1vh;
+    border: solid black 10px;
+    transform: scale(100%);
+    transition: transform 0.2s ease-in-out;
+    animation: fade-grow-in 0.5s ease-in-out;
+}
+
+#scroll-up:hover {
+    transform: scale(120%);
+    cursor: pointer;
+}
+
 /*CLASS*/
+.fade-out {
+    animation: fade-grow-in 0.5s ease-in-out backwards;
+}
+
+.active-card {
+    background-image: url(../img/cardSlot.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 10vw;
+    height: 15vw;
+    font-size: 70%;
+}
+
+.back-button {
+    position: absolute;
+    background-image: url(../img/cardSlotSide.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 10.5vw;
+    text-align: center;
+    top: 1%;
+    left: 1%;
+
+    transform: scale(100%);
+    transition: transform 0.2s ease-in-out;
+}
+
+.back-button:hover {
+    transform: scale(120%);
+    cursor: pointer;
+}
+
 .grid-left {
     display: flex;
     width: 100%;
@@ -202,19 +276,73 @@ body {
 /*GAME*/
 
 /*ID*/
+#game-body {
+    overflow: hidden;
+}
 
 /*CLASS*/
-.active-card {
+.game-flex {
+    display: flex;
+    width: 80vw;
+    height: 25vh;
+}
+
+.game-margin {
+    margin-top: 1vh;
+}
+
+.active-name-game {
+    font-size: 150%;
+}
+
+.card-background-game {
     background-image: url(../img/cardSlot.png);
-    background-repeat: no-repeat;
     background-size: contain;
-    width: 10vw;
-    height: 15vw;
-    font-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52.5%;
+    height: 80%;
+    font-size: 50%;
+    color: #EFDD91;
+}
+
+.deck-right {
+    width: 13,125%;
+    height: 20%;
+    position: fixed;
+    right: -20vw;
+    top: 40vh;
+}
+
+.deck-left {
+    width: 13,125%;
+    height: 20%;
+    position: fixed;
+    left: -20vw;
+    top: 40vh;
+}
+
+.active-card-game {
+    background-image: url(../img/cardSlot.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 52.5%;
+    height: 80%;
+    font-size: 50%;
+    color: #EFDD91;
+    text-align: center;
 }
 
 .active-icon {
     width: 2vw;
+}
+
+.active-icon-game {
+    width: 1.5vw;
 }
 
 .active-header {
@@ -233,6 +361,11 @@ body {
 .active-sprite {
     margin-top: 2%;
     width: 75%;
+}
+
+.active-sprite-game {
+    margin-top: 2%;
+    width: 32%;
 }
 
 .active-footer {
