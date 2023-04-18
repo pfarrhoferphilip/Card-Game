@@ -10,13 +10,19 @@
     <script src="../script/howToScript.js" defer></script>
 </head>
 
-<body>
+<body id="how-to-body">
     <h1 id="how-to-title">HOW TO PLAY</h1>
+
+    <div onclick='window.open("index.html", "_self")' class="back-button">
+        <h1>BACK</h1>
+    </div>
+
+    <img id="scroll-up" style="display: none;" onclick="scrollUp()" src="../img/arrow-up.png" alt="UP ARROW">
 
     <main id="how-to-play-grid">
         <!--DECK-->
         <div class="grid-left">
-            <div class="card-background">
+            <div style="width: 24vw;" class="card-background">
                 <h1>DECK</h1>
             </div>
             <div>
@@ -96,7 +102,8 @@
     <h1 class="text-center">WHAT ARE THE <br> <span style="color: #EFDD91;">COMPONENTS</span> OF A CARD?</h1>
 
     <div class="flex-center">
-        <div style="cursor: pointer;" onmouseenter="showTutorialText(true)" onmouseleave="showTutorialText(false)" class="active-card">
+        <div style="cursor: pointer;" onmouseenter="showTutorialText(true)" onmouseleave="showTutorialText(false)"
+            class="active-card">
             <div class="active-header">
                 <h2 style="transform: translateX(-2vw);" class="tutorial-text">NAME</h2>
                 <h2 class="rarity-rare tutorial-text-before">COW</h2>
@@ -116,7 +123,7 @@
                 <h2 style="transform: translateX(0.5vw);" class="tutorial-text">HP</h2>
                 <p></p>
                 <h2 class="tutorial-text-before">5</h2>
-                <img class="active-icon tutorial-text-before" src="../img/swordIcon.png">
+                <img class="active-icon" src="../img/swordIcon.png">
                 <h2 style="transform: translateX(5vw);" class="tutorial-text">DMG</h2>
             </div>
         </div>
