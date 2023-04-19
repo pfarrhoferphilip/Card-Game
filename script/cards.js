@@ -23,5 +23,12 @@ let card03 = {
     "cost": 5,
     "sprite": "bull.png"
 }
+let card04 = {
+    "name": "MOGUS",
+    "hp": 5,
+    "dmg": 7,
+    "cost": 7,
+    "sprite": "amogus.png"
+}
 
-let cards = [card01, card02, card03];
+let cards = [card01, card02, card03, card04];

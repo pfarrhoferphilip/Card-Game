@@ -138,7 +138,7 @@ function updateCardsOnActives(player) {
             <div class="active-card-game-actives p${player}_actives">
                 <h1 class="active-name-game">${current_actives[i].name}</h1>
                 <div class="flex-center">
-                    <img class="active-sprite-game" src="../img/${current_actives[i].sprite}" alt="${current_actives[i].name}">
+                    <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
                 </div>
                 <div class="flex-center">
                     <div class="flex-center-no-width">
@@ -320,7 +320,7 @@ function updateCardsOnHand(player) {
             <div onclick="selectCard(${player}, ${i})" class="active-card-game p${player}_hand">
                 <h1 class="active-name-game">${current_hand[i].name}</h1>
                 <div class="flex-center">
-                    <img class="active-sprite-game" src="../img/${current_hand[i].sprite}" alt="${current_hand[i].name}">
+                    <img class="active-sprite-game" src="../img/cards/${current_hand[i].sprite}" alt="${current_hand[i].name}">
                 </div>
                 <div class="flex-center">
                     <div class="flex-center-no-width">
