@@ -28,6 +28,8 @@ let p2_hp_element;
 let p1_overlay;
 let p2_overlay;
 let turn_count = 0;
+let p1_remove;
+let p2_remove;
 
 startGame();
 function startGame() {
@@ -42,6 +44,8 @@ function startGame() {
     p2_hp_element = document.getElementById("hp_p2_count");
     p1_overlay = document.getElementById("overlay-p1");
     p2_overlay = document.getElementById("overlay-p2");
+    p1_remove = document.getElementById("remove-p1");
+    p2_remove = document.getElementById("remove-p2")
 
     p1_orbs_element.innerHTML = p1_orbs;
     p2_orbs_element.innerHTML = p2_orbs;
@@ -52,7 +56,6 @@ function startGame() {
 }
 
 function realRemoveCard(player) {
-    console.log("test");
     if (curr_selected_card != null && curr_selected_card.name != "empty") {
         console.log("removing card...")
         let current_orbs;
@@ -79,11 +82,13 @@ function realRemoveCard(player) {
         for (let i = 0; i < p1_actives_element.length; i++) {
             p1_actives_element[i].classList.remove("glow");
         }
+        p1_remove.classList.remove("glow");
     } else {
         p2_hand[curr_selected_hand_slot] = no_card;
         for (let i = 0; i < p2_actives_element.length; i++) {
             p2_actives_element[i].classList.remove("glow");
         }
+        p2_remove.classList.remove("glow");
     }
 
     curr_selected_card = null;
@@ -186,6 +191,11 @@ function endTurn() {
     if (curr_selected_card != null) {
         curr_selected_card_element.id = "";
         curr_selected_card = null;
+        if (p1_turn) {
+            p2_remove.classList.remove("glow");
+        } else {
+            p1_remove.classList.remove("glow");
+        }
     }
 
     if (p1_turn == true) {
@@ -193,6 +203,7 @@ function endTurn() {
         p1_overlay.classList.remove("overlay-active");
         p2_overlay.classList.add("overlay-active");
         dealCardsOnHand(1);
+        startAttacks();
     } else {
         end_turn_button.id = "end-turn-button-p2";
         p2_overlay.classList.remove("overlay-active");
@@ -200,10 +211,11 @@ function endTurn() {
         dealCardsOnHand(2);
     }
 
-    if (turn_count > 0) {
-        startAttacks();
-    }
+    //if (turn_count > 0) {
+    //    startAttacks();
+    //}
     turn_count++;
+    document.title = "TURN: " + turn_count;
 }
 
 function placeSpecificCardOnActives(player, active_id, card) {
@@ -327,6 +339,7 @@ function placeCardOnActive(player, card, active_slot) {
                 for (let i = 0; i < p1_actives_element.length; i++) {
                     p1_actives_element[i].classList.remove("glow");
                 }
+                p1_remove.classList.remove("glow");
                 p1_orbs -= curr_selected_card.cost;
             } else {
                 p2_actives = current_actives;
@@ -334,6 +347,7 @@ function placeCardOnActive(player, card, active_slot) {
                 for (let i = 0; i < p2_actives_element.lengthq; i++) {
                     p2_actives_element[i].classList.remove("glow");
                 }
+                p2_remove.classList.remove("glow");
                 p2_orbs -= curr_selected_card.cost;
             }
 
@@ -367,6 +381,7 @@ function selectCard(player, slot) {
             curr_selected_hand_slot = slot;
             curr_selected_card_element = p1_hand_element[slot];
             letElementsGlow(p1_actives_element);
+            p1_remove.classList.add("glow");
         }
     } else if (player == 2 && p1_turn == false) {
         if (p2_orbs >= p2_hand[slot].cost) {
@@ -374,6 +389,7 @@ function selectCard(player, slot) {
             curr_selected_hand_slot = slot;
             curr_selected_card_element = p2_hand_element[slot];
             letElementsGlow(p2_actives_element);
+            p2_remove.classList.add("glow");
         }
     }
 
@@ -406,13 +422,23 @@ function removeCardOnHand(player, hand_id) {
 
 function chooseRandomDeckCard(player) {
     let current_deck;
+    let random_card;
     if (player == 1) {
         current_deck = p1_deck;
     } else {
         current_deck = p2_deck;
     }
 
-    return Math.floor(Math.random() * current_deck.length);
+    random_card = Math.floor(Math.random() * current_deck.length);
+    if (turn_count > 0) {
+        return random_card;
+    } else {
+        if (cards[random_card].cost <= 3) {
+            return random_card;
+        } else {
+            return 0;
+        }
+    }
 }
 
 function dealCardsOnHand(player) {

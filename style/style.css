@@ -48,8 +48,9 @@ body {
 /*ID*/
 #head_title {
     text-align: center;
-    font-size: 300%;
+    font-size: 400%;
     margin-bottom: 3%;
+    margin-top: 0%;
 }
 
 /*CLASS*/
@@ -72,6 +73,10 @@ body {
     color: #c6b858;
     cursor: pointer;
     transform: scale(120%);
+}
+
+.color-yellow {
+    color: #EFDD91;
 }
 
 /*HOW TO PLAY*/
@@ -144,8 +149,8 @@ body {
     background-size: cover;
     width: 10.5vw;
     text-align: center;
-    top: 1%;
-    left: 1%;
+    top: 2%;
+    left: 1.5%;
 
     transform: scale(100%);
     transition: transform 0.2s ease-in-out;
@@ -573,4 +578,15 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+/*CREDITS*/
+.credits-cat {
+    color: #c6b858;
+    text-align: center;
+}
+
+.credits-per {
+    text-align: center;
+    margin-bottom: 10vh;
 }

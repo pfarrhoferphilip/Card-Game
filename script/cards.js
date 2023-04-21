@@ -25,7 +25,7 @@ let card03 = {
 }
 let card04 = {
     "name": "CROCODILE",
-    "hp": 5,
+    "hp": 4,
     "dmg": 7,
     "cost": 6,
     "sprite": "crocodile.png"

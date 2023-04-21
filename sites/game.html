@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARD GAME</title>
+    <title>TURN: 0</title>
     <link rel="stylesheet" href="../style/style.css">
     <link rel="shortcut icon" href="../img/cards/unicorn.png" type="image/x-icon">
     <script src="../script/cards.js"></script>
@@ -13,6 +13,7 @@
 </head>
 
 <body id="game-body">
+    
     <!--P2 HAND-->
     <div class="flex-center">
         <div class="game-flex">
@@ -33,6 +34,16 @@
             </div>
         </div>
     </div>
+
+    <!--P1 DECK-->
+    <div onclick="realRemoveCard(1)" id="remove-p1" class="card-background-game deck-right">
+        <h1>REMOVE</h1>
+    </div>
+    <!--P2 DECK-->
+    <div onclick="realRemoveCard(2)" id="remove-p2" class="card-background-game deck-left">
+        <h1>REMOVE</h1>
+    </div>
+    
     <!--P2 ACTIVE-->
     <div class="flex-center game-margin">
         <div class="game-flex">
@@ -86,14 +97,6 @@
                 <h1>HAND</h1>
             </div>
         </div>
-    </div>
-    <!--P1 DECK-->
-    <div onclick="realRemoveCard(1)" id="remove-p1" class="card-background-game deck-right">
-        <h1>REMOVE</h1>
-    </div>
-    <!--P2 DECK-->
-    <div onclick="realRemoveCard(2)" class="card-background-game deck-left">
-        <h1>REMOVE</h1>
     </div>
 
     <!--ORBS P1-->
