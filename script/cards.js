@@ -20,15 +20,36 @@ let card03 = {
     "name": "BULL",
     "hp": 7,
     "dmg": 3,
-    "cost": 5,
+    "cost": 4,
     "sprite": "bull.png"
 }
 let card04 = {
-    "name": "MOGUS",
+    "name": "CROCODILE",
     "hp": 5,
     "dmg": 7,
-    "cost": 7,
-    "sprite": "amogus.png"
+    "cost": 6,
+    "sprite": "crocodile.png"
+}
+let card05 = {
+    "name": "GOAT",
+    "hp": 2,
+    "dmg": 1,
+    "cost": 1,
+    "sprite": "goat.png"
+}
+let card06 = {
+    "name": "UNICORN",
+    "hp": 4,
+    "dmg": 0,
+    "cost": 1,
+    "sprite": "unicorn.png"
+}
+let card07 = {
+    "name": "TURTLE",
+    "hp": 10,
+    "dmg": 1,
+    "cost": 3,
+    "sprite": "turtle.png"
 }
 
-let cards = [card01, card02, card03, card04];
+let cards = [card01, card02, card03, card04, card05, card06, card07];

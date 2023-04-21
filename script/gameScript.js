@@ -11,11 +11,23 @@ let p2_deck = cards;
 let p1_turn = true;
 let curr_selected_card;
 let curr_selected_hand_slot;
+let curr_selected_card_element;
 let end_turn_button;
 let p1_orbs = 0;
 let p2_orbs = 0;
 let p1_orbs_gain = 3;
 let p2_orbs_gain = 3;
+let p1_orbs_element;
+let p2_orbs_element;
+let max_orbs = 15;
+let p1_hp =19;
+let p2_hp = 19;
+let hp_max = 20;
+let p1_hp_element;
+let p2_hp_element;
+let p1_overlay;
+let p2_overlay;
+let turn_count = 0;
 
 startGame();
 function startGame() {
@@ -24,12 +36,110 @@ function startGame() {
     p2_actives_element = document.getElementsByClassName("p2_actives");
     p1_actives_element = document.getElementsByClassName("p1_actives");
     end_turn_button = document.getElementById("end-turn-button-p1");
+    p1_orbs_element = document.getElementById("orbs_p1_count");
+    p2_orbs_element = document.getElementById("orbs_p2_count");
+    p1_hp_element = document.getElementById("hp_p1_count");
+    p2_hp_element = document.getElementById("hp_p2_count");
+    p1_overlay = document.getElementById("overlay-p1");
+    p2_overlay = document.getElementById("overlay-p2");
+
+    p1_orbs_element.innerHTML = p1_orbs;
+    p2_orbs_element.innerHTML = p2_orbs;
+    p1_hp_element.innerHTML = p1_hp;
+    p2_hp_element.innerHTML = p2_hp;
 
     dealCardsOnHand(1);
 }
 
+function realRemoveCard(player) {
+    console.log("test");
+    if (curr_selected_card != null && curr_selected_card.name != "empty") {
+        console.log("removing card...")
+        let current_orbs;
+        if (player == 1) {
+            current_orbs = p1_orbs;
+        } else {
+            current_orbs = p2_orbs;
+        }
+        if (current_orbs >= curr_selected_card.cost) {
+            current_orbs -= curr_selected_card.cost;
+            removeCardOnHand(player, curr_selected_hand_slot);
+        }
+        if (player == 1) {
+            p1_orbs = current_orbs;
+            p1_orbs_element.innerHTML = p1_orbs;
+        } else {
+            p2_orbs = current_orbs;
+            p2_orbs_element.innerHTML = p2_orbs;
+        }
+    }
+
+    if (player == 1) {
+        p1_hand[curr_selected_hand_slot] = no_card;
+        for (let i = 0; i < p1_actives_element.length; i++) {
+            p1_actives_element[i].classList.remove("glow");
+        }
+    } else {
+        p2_hand[curr_selected_hand_slot] = no_card;
+        for (let i = 0; i < p2_actives_element.length; i++) {
+            p2_actives_element[i].classList.remove("glow");
+        }
+    }
+
+    curr_selected_card = null;
+}
+
+function healPlayer(player, heal) {
+    if (player == 1) {
+        p1_hp += heal;
+        if (p1_hp > hp_max) {
+            p1_hp = hp_max;
+        }
+        p1_hp_element.innerHTML = p1_hp;
+    } else {
+        p2_hp += heal;
+        if (p2_hp > hp_max) {
+            p2_hp = hp_max;
+        }
+        p2_hp_element.innerHTML = p2_hp;
+    }
+    console.log(`healt ${heal} damage from Player ${player}`);
+}
+
+function damagePlayer(player, damage) {
+    if (player == 1) {
+        p1_hp -= damage;
+        if (p1_hp < 0)
+            p1_hp = 0;
+        p1_hp_element.innerHTML = p1_hp;
+    } else {
+        p2_hp -= damage;
+        if (p2_hp < 0)
+            p2_hp = 0;
+        p2_hp_element.innerHTML = p2_hp;
+    }
+    console.log(`dealt ${damage} damage to Player ${player}`);
+
+    checkPlayerHP();
+}
+
+function checkPlayerHP() {
+
+    if (p1_hp <= 0 && p2_hp <= 0) {
+        console.log("DRAW!");
+    } else {
+        if (p1_hp <= 0) {
+            console.log("P2 WINS!");
+        }
+
+        if (p2_hp <= 0) {
+            console.log("P1 WINS!");
+        }
+    }
+}
+
 function removeDeadCards() {
-    console.log("Removing dead cards")
+    console.log("Removing dead cards...")
 
     for (let i = 0; i < p1_actives.length; i++) {
         if (isDead(p1_actives[i])) {
@@ -51,14 +161,19 @@ function startAttacks() {
     for (let i = 0; i < p1_actives.length; i++) {
         if (p1_actives[i].name !== "empty") {
             if (p2_actives[i].name !== "empty") {
-                damageCard(2, i, p1_actives[i].dmg);
+                damageCard(2, i, p1_actives[i].dmg, false);
+            } else {
+                damagePlayer(2, p1_actives[i].dmg);
             }
         }
     }
+
     for (let i = 0; i < p2_actives.length; i++) {
         if (p2_actives[i].name !== "empty") {
             if (p1_actives[i].name !== "empty") {
-                damageCard(1, i, p2_actives[i].dmg);
+                damageCard(1, i, p2_actives[i].dmg, false);
+            } else {
+                damagePlayer(1, p2_actives[i].dmg);
             }
         }
     }
@@ -68,15 +183,27 @@ function startAttacks() {
 
 function endTurn() {
     p1_turn = !p1_turn;
+    if (curr_selected_card != null) {
+        curr_selected_card_element.id = "";
+        curr_selected_card = null;
+    }
 
     if (p1_turn == true) {
         end_turn_button.id = "end-turn-button-p1";
-        startAttacks();
+        p1_overlay.classList.remove("overlay-active");
+        p2_overlay.classList.add("overlay-active");
         dealCardsOnHand(1);
     } else {
         end_turn_button.id = "end-turn-button-p2";
+        p2_overlay.classList.remove("overlay-active");
+        p1_overlay.classList.add("overlay-active");
         dealCardsOnHand(2);
     }
+
+    if (turn_count > 0) {
+        startAttacks();
+    }
+    turn_count++;
 }
 
 function placeSpecificCardOnActives(player, active_id, card) {
@@ -106,16 +233,25 @@ function isDead(card) {
     return card.hp <= 0;
 }
 
-function damageCard(player, slot, damage) {
+function damageCard(player, slot, damage, is_counter_damage) {
     let current_card;
+    let other_player;
 
     if (player == 1) {
         current_card = p1_actives[slot];
+        other_player = 2;
     } else {
         current_card = p2_actives[slot];
+        other_player = 1;
     }
 
     current_card.hp -= damage;
+
+    //damage other card
+    //if (is_counter_damage == false) {
+    //    damageCard(other_player, slot, p2_actives[slot].damage, true);
+    //}
+
     console.log(`dealt ${damage} damage to Player ${player} slot ${slot}`);
 }
 
@@ -191,13 +327,17 @@ function placeCardOnActive(player, card, active_slot) {
                 for (let i = 0; i < p1_actives_element.length; i++) {
                     p1_actives_element[i].classList.remove("glow");
                 }
+                p1_orbs -= curr_selected_card.cost;
             } else {
                 p2_actives = current_actives;
                 p2_hand[curr_selected_hand_slot] = no_card;
                 for (let i = 0; i < p2_actives_element.lengthq; i++) {
                     p2_actives_element[i].classList.remove("glow");
                 }
+                p2_orbs -= curr_selected_card.cost;
             }
+
+
             curr_selected_card = null;
             curr_selected_hand_slot = null;
 
@@ -217,21 +357,28 @@ function letElementsGlow(elements) {
 }
 
 function selectCard(player, slot) {
+
+    if (curr_selected_card_element != null)
+        curr_selected_card_element.id = "";
+
     if (player == 1 && p1_turn == true) {
         if (p1_orbs >= p1_hand[slot].cost) {
-            p1_orbs -= p1_hand[slot].cost;
             curr_selected_card = p1_hand[slot];
             curr_selected_hand_slot = slot;
+            curr_selected_card_element = p1_hand_element[slot];
             letElementsGlow(p1_actives_element);
         }
     } else if (player == 2 && p1_turn == false) {
         if (p2_orbs >= p2_hand[slot].cost) {
-            p2_orbs -= p2_hand[slot].cost;
             curr_selected_card = p2_hand[slot];
             curr_selected_hand_slot = slot;
+            curr_selected_card_element = p2_hand_element[slot];
             letElementsGlow(p2_actives_element);
         }
     }
+
+    if (curr_selected_card != null)
+        curr_selected_card_element.id = "curr-selected-card";
 }
 
 function placeSpecificCardOnHand(player, hand_id, card) {
@@ -273,9 +420,15 @@ function dealCardsOnHand(player) {
     if (player == 1) {
         current_hand = p1_hand;
         p1_orbs += p1_orbs_gain;
+        if (p1_orbs > max_orbs) {
+            p1_orbs = max_orbs;
+        }
     } else {
         current_hand = p2_hand;
         p2_orbs += p2_orbs_gain;
+        if (p2_orbs > max_orbs) {
+            p2_orbs = max_orbs;
+        }
     }
 
     for (let i = 0; i < current_hand.length; i++) {
@@ -308,16 +461,18 @@ function updateCardsOnHand(player) {
     if (player == 1) {
         current_hand_e = p1_hand_element;
         current_hand = p1_hand;
+        p1_orbs_element.innerHTML = p1_orbs;
     } else {
         current_hand_e = p2_hand_element;
         current_hand = p2_hand;
+        p2_orbs_element.innerHTML = p2_orbs;
     }
 
     for (let i = 0; i < current_hand.length; i++) {
         if (current_hand[i].name !== "empty") {
             current_hand_e[i].outerHTML = `
 
-            <div onclick="selectCard(${player}, ${i})" class="active-card-game p${player}_hand">
+            <div onclick="selectCard(${player}, ${i})" id="" class="active-card-game p${player}_hand">
                 <h1 class="active-name-game">${current_hand[i].name}</h1>
                 <div class="flex-center">
                     <img class="active-sprite-game" src="../img/cards/${current_hand[i].sprite}" alt="${current_hand[i].name}">
@@ -350,3 +505,7 @@ function updateCardsOnHand(player) {
 
     }
 }
+
+window.onbeforeunload = function () {
+    return "U sure?";
+};

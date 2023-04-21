@@ -312,7 +312,7 @@ body {
 #end-turn-button-p2 {
     position: absolute;
     right: 2vw;
-    bottom: 2vh;
+    top: 2vh;
     background-color: #b4202a;
     text-align: center;
     padding-left: 0.5vw;
@@ -336,6 +336,62 @@ body {
     transform: translateY(0vh);
 }
 
+#orbs-p1 {
+    position: absolute;
+    bottom: 20%;
+    right: -8%;
+}
+
+#orbs-p2 {
+    position: absolute;
+    top: 20%;
+    right: -8%;
+}
+
+#hp-p1 {
+    position: absolute;
+    bottom: 20%;
+    left: 1%;
+}
+
+#hp-p2 {
+    position: absolute;
+    top: 20%;
+    left: 1%;
+}
+
+#overlay-p1 {
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    bottom: 0vh;
+    left: 0vw;
+}
+
+#overlay-p2 {
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    top: 0vh;
+    left: 0vw;
+}
+
+.overlay {
+    background-color: transparent;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.overlay-active {
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: all;
+}
+
+#curr-selected-card {
+    transform: translateY(-2vh);
+    filter: drop-shadow(10px 10px 4px #14a02e);
+}
+
 /*CLASS*/
 .game-flex {
     display: flex;
@@ -355,6 +411,26 @@ body {
 
 .nomargin {
     margin: 0%;
+}
+
+.health-background-game {
+    background-image: url(../img/cardSlotSide.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: white;
+    width: 20vw;
+    height: 7vw;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 5%;
+    text-align: center;
+    font-size: 120%;
+}
+
+.health-background-game img {
+    width: 25%;
+    margin-right: 5%;
 }
 
 .game-margin {
@@ -412,7 +488,7 @@ body {
     color: #EFDD91;
     text-align: center;
     transform: translateY(0vh);
-    transition: transform 0.2s ease-out, filter 0.2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 .active-card-game:hover {

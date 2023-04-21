@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARD GAME</title>
     <link rel="stylesheet" href="../style/style.css">
+    <link rel="shortcut icon" href="../img/cards/unicorn.png" type="image/x-icon">
     <script src="../script/cards.js"></script>
     <script src="../script/gameScript.js" defer></script>
 </head>
@@ -87,18 +88,52 @@
         </div>
     </div>
     <!--P1 DECK-->
-    <div class="card-background-game deck-right">
-        <h1>DECK</h1>
+    <div onclick="realRemoveCard(1)" id="remove-p1" class="card-background-game deck-right">
+        <h1>REMOVE</h1>
     </div>
     <!--P2 DECK-->
-    <div class="card-background-game deck-left">
-        <h1>DECK</h1>
+    <div onclick="realRemoveCard(2)" class="card-background-game deck-left">
+        <h1>REMOVE</h1>
+    </div>
+
+    <!--ORBS P1-->
+    <div id="orbs-p1">
+        <div class="health-background-game">
+            <img class="" src="../img/orb.png" alt="Orbs">
+            <h1 id="orbs_p1_count">3</h1>
+        </div>
+    </div>
+    <!--ORBS P2-->
+    <div id="orbs-p2">
+        <div class="health-background-game">
+            <img class="" src="../img/orb.png" alt="Orbs">
+            <h1 id="orbs_p2_count">3</h1>
+        </div>
+    </div>
+
+    <!--HEALTH P1-->
+    <div id="hp-p1">
+        <div class="health-background-game">
+            <img class="" src="../img/heartIcon.png" alt="Orbs">
+            <h1 id="hp_p1_count">10</h1>
+        </div>
+    </div>
+    <!--HEALTH P2-->
+    <div id="hp-p2">
+        <div class="health-background-game">
+            <img class="" src="../img/heartIcon.png" alt="Orbs">
+            <h1 id="hp_p2_count">10</h1>
+        </div>
     </div>
 
     <!--END TURN BUTTON-->
     <div id="end-turn-button-p1">
         <h2 onclick="endTurn()" class="noselect">END TURN</h2>
     </div>
+
+    <!--OVERLAYS-->
+    <div id="overlay-p1" class="overlay"></div>
+    <div id="overlay-p2" class="overlay overlay-active"></div>
 
 </body>
 
