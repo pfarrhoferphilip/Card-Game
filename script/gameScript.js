@@ -20,7 +20,7 @@ let p2_orbs_gain = 3;
 let p1_orbs_element;
 let p2_orbs_element;
 let max_orbs = 15;
-let p1_hp =19;
+let p1_hp = 19;
 let p2_hp = 19;
 let hp_max = 20;
 let p1_hp_element;
@@ -30,6 +30,11 @@ let p2_overlay;
 let turn_count = 0;
 let p1_remove;
 let p2_remove;
+let scores;
+var r = document.querySelector(':root');
+let p1_name;
+let p2_name;
+let game_is_over = false;
 
 startGame();
 function startGame() {
@@ -46,13 +51,90 @@ function startGame() {
     p2_overlay = document.getElementById("overlay-p2");
     p1_remove = document.getElementById("remove-p1");
     p2_remove = document.getElementById("remove-p2")
+    r.style.setProperty('--p1_color', localStorage['p1_color']);
+    r.style.setProperty('--p2_color', localStorage['p2_color']);
+    p1_name = localStorage['p1_name'];
+    p2_name = localStorage['p2_name'];
 
     p1_orbs_element.innerHTML = p1_orbs;
     p2_orbs_element.innerHTML = p2_orbs;
     p1_hp_element.innerHTML = p1_hp;
     p2_hp_element.innerHTML = p2_hp;
+    document.getElementById("p1-overlay-text").innerHTML = `${p2_name} TURN`;
+    document.getElementById("p2-overlay-text").innerHTML = `${p1_name} TURN`;
+
+    if (localStorage['scores']) {
+        scores = JSON.parse(localStorage['scores']);
+    } else {
+        scores = [0];
+    }
 
     dealCardsOnHand(1);
+}
+
+function endGame(winner) {
+
+    if (game_is_over == false) {
+        game_is_over = true;
+
+        if (winner == 1) {
+            localStorage['is_draw'] = false;
+            localStorage['winner_name'] = p1_name;
+            let leaderboard;
+            if (localStorage['leaderboard']) {
+                leaderboard = JSON.parse(localStorage['leaderboard']);
+            } else {
+                leaderboard = [];
+            }
+
+            let new_entry = {
+                "name": p1_name,
+                "score": turn_count,
+                "color": localStorage['p1_color']
+            }
+            leaderboard.push(new_entry);
+            localStorage['leaderboard'] = JSON.stringify(leaderboard);
+
+        } else if (winner == 2) {
+            localStorage['is_draw'] = false;
+            localStorage['winner_name'] = p2_name;
+
+            let leaderboard;
+            if (localStorage['leaderboard']) {
+                leaderboard = JSON.parse(localStorage['leaderboard']);
+            } else {
+                leaderboard = [];
+            }
+
+            let new_entry = {
+                "name": p2_name,
+                "score": turn_count,
+                "color": localStorage['p2_color']
+            }
+            leaderboard.push(new_entry);
+            localStorage['leaderboard'] = JSON.stringify(leaderboard);
+        } else {
+            localStorage['is_draw'] = true;
+        }
+
+        window.open("finishGame.html", "_self");
+    }
+}
+
+function checkActiveStatus(player) {
+    if (player == 1) {
+        for (let i = 0; i < p1_actives.length; i++) {
+            if (p1_actives[i].turns_till_active == 0 && p1_actives_element[i].classList.contains("opacity-low")) {
+                p1_actives[i].is_grey = false;
+            }
+        }
+    } else {
+        for (let i = 0; i < p2_actives.length; i++) {
+            if (p2_actives[i].turns_till_active == 0 && p2_actives_element[i].classList.contains("opacity-low")) {
+                p2_actives[i].is_grey = false;
+            }
+        }
+    }
 }
 
 function realRemoveCard(player) {
@@ -131,14 +213,14 @@ function damagePlayer(player, damage) {
 function checkPlayerHP() {
 
     if (p1_hp <= 0 && p2_hp <= 0) {
-        console.log("DRAW!");
+        endGame(0);
     } else {
         if (p1_hp <= 0) {
-            console.log("P2 WINS!");
+            endGame(2);
         }
 
         if (p2_hp <= 0) {
-            console.log("P1 WINS!");
+            endGame(1);
         }
     }
 }
@@ -166,9 +248,17 @@ function startAttacks() {
     for (let i = 0; i < p1_actives.length; i++) {
         if (p1_actives[i].name !== "empty") {
             if (p2_actives[i].name !== "empty") {
-                damageCard(2, i, p1_actives[i].dmg, false);
+                if (p1_actives[i].turns_till_active == 0) {
+                    damageCard(2, i, p1_actives[i].dmg, false);
+                } else {
+                    p1_actives[i].turns_till_active -= 1;
+                }
             } else {
-                damagePlayer(2, p1_actives[i].dmg);
+                if (p1_actives[i].turns_till_active == 0) {
+                    damagePlayer(2, p1_actives[i].dmg);
+                } else {
+                    p1_actives[i].turns_till_active -= 1;
+                }
             }
         }
     }
@@ -176,9 +266,17 @@ function startAttacks() {
     for (let i = 0; i < p2_actives.length; i++) {
         if (p2_actives[i].name !== "empty") {
             if (p1_actives[i].name !== "empty") {
-                damageCard(1, i, p2_actives[i].dmg, false);
+                if (p2_actives[i].turns_till_active == 0) {
+                    damageCard(1, i, p2_actives[i].dmg, false);
+                } else {
+                    p2_actives[i].turns_till_active -= 1;
+                }
             } else {
-                damagePlayer(1, p2_actives[i].dmg);
+                if (p2_actives[i].turns_till_active == 0) {
+                    damagePlayer(1, p2_actives[i].dmg);
+                } else {
+                    p2_actives[i].turns_till_active -= 1;
+                }
             }
         }
     }
@@ -197,13 +295,15 @@ function endTurn() {
             p1_remove.classList.remove("glow");
         }
     }
+    checkActiveStatus(1);
+    checkActiveStatus(2);
+    startAttacks();
 
     if (p1_turn == true) {
         end_turn_button.id = "end-turn-button-p1";
         p1_overlay.classList.remove("overlay-active");
         p2_overlay.classList.add("overlay-active");
         dealCardsOnHand(1);
-        startAttacks();
     } else {
         end_turn_button.id = "end-turn-button-p2";
         p2_overlay.classList.remove("overlay-active");
@@ -215,7 +315,7 @@ function endTurn() {
     //    startAttacks();
     //}
     turn_count++;
-    document.title = "TURN: " + turn_count;
+    document.title = `TURN ${turn_count}: WILDLIFE WARRIORS`;
 }
 
 function placeSpecificCardOnActives(player, active_id, card) {
@@ -281,7 +381,8 @@ function updateCardsOnActives(player) {
 
     for (let i = 0; i < current_actives.length; i++) {
         if (current_actives[i].name !== "empty") {
-            current_actives_e[i].outerHTML = `
+            if (current_actives[i].turns_till_active == 0 && current_actives[i].is_grey == false) {
+                current_actives_e[i].outerHTML = `
 
             <div class="active-card-game-actives p${player}_actives">
                 <h1 class="active-name-game">${current_actives[i].name}</h1>
@@ -301,6 +402,29 @@ function updateCardsOnActives(player) {
             </div>
 
         `;
+            } else {
+                current_actives_e[i].outerHTML = `
+
+            <div class="active-card-game-actives p${player}_actives opacity-low">
+                <h1 class="active-name-game">${current_actives[i].name}</h1>
+                <div class="flex-center">
+                    <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
+                </div>
+                <div class="flex-center">
+                    <div class="flex-center-no-width">
+                        <img class="active-icon-game" src="../img/heartIcon.png">
+                        <h2 class="">${current_actives[i].hp}</h2>
+                    </div>
+                    <div class="flex-center-no-width">
+                        <h2 class="">${current_actives[i].dmg}</h2>
+                        <img class="active-icon-game" src="../img/swordIcon.png">
+                    </div>
+                </div>
+            </div>
+
+        `;
+            }
+
         } else {
             current_actives_e[i].outerHTML = `
 
@@ -354,7 +478,6 @@ function placeCardOnActive(player, card, active_slot) {
 
             curr_selected_card = null;
             curr_selected_hand_slot = null;
-
 
             updateCardsOnHand(player);
             updateCardsOnActives(player);
@@ -533,5 +656,6 @@ function updateCardsOnHand(player) {
 }
 
 window.onbeforeunload = function () {
-    return "U sure?";
+    if (p1_hp > 0 && p2_hp > 0)
+        return "U sure?";
 };

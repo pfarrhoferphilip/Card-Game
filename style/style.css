@@ -1,3 +1,8 @@
+:root {
+    --p1_color: #14a02e;
+    --p2_color: #b4202a;
+}
+
 @font-face {
     font-family: pixel;
     src: url(../font/Pixeled.ttf);
@@ -37,6 +42,13 @@ body {
     display: flex;
     justify-content: right;
     align-items: center;
+}
+
+.flex-evenly {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 60vh;
 }
 
 .text-center {
@@ -290,26 +302,26 @@ body {
     position: absolute;
     right: 2vw;
     bottom: 2vh;
-    background-color: #14a02e;
+    background-color: var(--p1_color);
     text-align: center;
     padding-left: 0.5vw;
     padding-right: 0.5vw;
     margin: 0%;
     border-radius: 20%;
-    filter: drop-shadow(1.5vh 1.5vh 0px #59c135);
+    filter: drop-shadow(1.5vh 1.5vh 0px var(--p1_color));
     transform: translateY(-1.5vh) translateX(-1.5vh);
     transition: all 0.2s ease-out;
 }
 
 #end-turn-button-p1:hover {
     cursor: pointer;
-    filter: drop-shadow(0.5vh 0.5vh 0px #59c135);
+    filter: drop-shadow(0.5vh 0.5vh 0px var(--p1_color));
     transform: translateY(-0.5vh);
 }
 
 #end-turn-button-p1:active {
     cursor: pointer;
-    filter: drop-shadow(0.0vh 0.0vh 0px #59c135);
+    filter: drop-shadow(0.0vh 0.0vh 0px var(--p1_color));
     transform: translateY(0vh);
 }
 
@@ -318,26 +330,26 @@ body {
     position: absolute;
     right: 2vw;
     top: 2vh;
-    background-color: #b4202a;
+    background-color: var(--p2_color);
     text-align: center;
     padding-left: 0.5vw;
     padding-right: 0.5vw;
     margin: 0%;
     border-radius: 20%;
-    filter: drop-shadow(1.5vh 1.5vh 0px #df3e23);
+    filter: drop-shadow(1.5vh 1.5vh 0px var(--p2_color));
     transform: translateY(-1.5vh) translateX(-1.5vh);
     transition: all 0.2s ease-out;
 }
 
 #end-turn-button-p2:hover {
     cursor: pointer;
-    filter: drop-shadow(0.5vh 0.5vh 0px #df3e23);
+    filter: drop-shadow(0.5vh 0.5vh 0px var(--p2_color));
     transform: translateY(-0.5vh);
 }
 
 #end-turn-button-p2:active {
     cursor: pointer;
-    filter: drop-shadow(0.0vh 0.0vh 0px #df3e23);
+    filter: drop-shadow(0.0vh 0.0vh 0px var(--p2_color));
     transform: translateY(0vh);
 }
 
@@ -383,6 +395,7 @@ body {
 
 .overlay {
     background-color: transparent;
+    color: transparent;
     transition: all 0.5s ease-in-out;
     pointer-events: none;
 }
@@ -390,6 +403,7 @@ body {
 .overlay-active {
     background-color: rgba(0, 0, 0, 0.5);
     pointer-events: all;
+    color: white;
 }
 
 #curr-selected-card {
@@ -580,6 +594,10 @@ body {
     text-align: center;
 }
 
+.opacity-low {
+    opacity: 0.5;
+}
+
 /*CREDITS*/
 .credits-cat {
     color: #c6b858;
@@ -589,4 +607,91 @@ body {
 .credits-per {
     text-align: center;
     margin-bottom: 10vh;
+}
+
+/*PREGAME*/
+input {
+    height: 5vh;
+    width: 10vw;
+    margin: 2vw;
+    font-family: pixel;
+}
+
+.small-title-pregame {
+    text-align: center;
+    font-size: 200%;
+}
+
+/*P1 END TURN*/
+#confirm-button {
+    position: relative;
+    background-color: #14a02e;
+    text-align: center;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    margin: 0%;
+    margin-top: 5vh;
+    border-radius: 20%;
+    width: 10vw;
+    filter: drop-shadow(1.5vh 1.5vh 0px #59c135);
+    transform: translateY(-1.5vh) translateX(-1.5vh);
+    transition: all 0.2s ease-out;
+}
+
+#confirm-button:hover {
+    cursor: pointer;
+    filter: drop-shadow(0.5vh 0.5vh 0px #59c135);
+    transform: translateY(-0.5vh);
+}
+
+#confirm-button:active {
+    cursor: pointer;
+    filter: drop-shadow(0.0vh 0.0vh 0px #59c135);
+    transform: translateY(0vh);
+}
+
+.play-again-button {
+    position: relative;
+    background-color: #14a02e;
+    text-align: center;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    margin: 0%;
+    margin-top: 5vh;
+    border-radius: 20%;
+    filter: drop-shadow(1.5vh 1.5vh 0px #59c135);
+    transform: translateY(-1.5vh) translateX(-1.5vh);
+    transition: all 0.2s ease-out;
+}
+
+.play-again-button:hover {
+    cursor: pointer;
+    filter: drop-shadow(0.5vh 0.5vh 0px #59c135);
+    transform: translateY(-0.5vh);
+}
+
+.play-again-button:active {
+    cursor: pointer;
+    filter: drop-shadow(0.0vh 0.0vh 0px #59c135);
+    transform: translateY(0vh);
+}
+
+/*LEADERBOARD*/
+#leaderboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 50vw;
+}
+
+td {
+    border-color: white;
+    border-width: 5px;
+    border-style: solid;
+    border-collapse: collapse;
+    margin: 20%;
+    text-align: center;
 }

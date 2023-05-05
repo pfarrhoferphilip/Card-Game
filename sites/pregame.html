@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAY: WILDLIFE WARRIORS</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="shortcut icon" href="./../img/gear.png" type="image/x-icon">
+    <script src="./../script/settings.js" defer></script>
+</head>
+
+<body>
+    <h1 id="head_title">GAME SETTINGS</h1>
+
+    <h2 id="error" style="text-align: center; display: none; color: red;">INVALID INPUT</h2>
+
+    <!--PLAYER 1-->
+    <h2 class="small-title-pregame">PLAYER 1</h2>
+    <div class="flex-center">
+        <h2>NAME:</h2>
+        <input type="text" id="p1_name" value="HEHEHEHA">
+        <h2>COLOR:</h2>
+        <input type="color" id="p1_color">
+    </div>
+
+    <!--PLAYER 2-->
+    <h2 class="small-title-pregame">PLAYER 2</h2>
+    <div class="flex-center">
+        <h2>NAME:</h2>
+        <input type="text" id="p2_name" value="">
+        <h2>COLOR:</h2>
+        <input type="color" id="p2_color">
+    </div>
+
+    <div class="flex-center">
+        <div onclick="setValues()" id="confirm-button">
+            <h2 class="noselect">PLAY</h2>
+        </div>
+    </div>
+</body>
+
+</html>

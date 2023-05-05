@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TURN: 0</title>
+    <title>TURN 0: WILDLIFE WARRIORS</title>
     <link rel="stylesheet" href="../style/style.css">
     <link rel="shortcut icon" href="../img/cards/unicorn.png" type="image/x-icon">
     <script src="../script/cards.js"></script>
@@ -43,7 +43,7 @@
     <div onclick="realRemoveCard(2)" id="remove-p2" class="card-background-game deck-left">
         <h1>REMOVE</h1>
     </div>
-    
+
     <!--P2 ACTIVE-->
     <div class="flex-center game-margin">
         <div class="game-flex">
@@ -130,13 +130,13 @@
     </div>
 
     <!--END TURN BUTTON-->
-    <div id="end-turn-button-p1">
-        <h2 onclick="endTurn()" class="noselect">END TURN</h2>
+    <div onclick="endTurn()" id="end-turn-button-p1">
+        <h2 class="noselect">END TURN</h2>
     </div>
 
     <!--OVERLAYS-->
-    <div id="overlay-p1" class="overlay"></div>
-    <div id="overlay-p2" class="overlay overlay-active"></div>
+    <div id="overlay-p1" class="overlay"><div class="flex-center" style="height: 100%;"><h1 id="p1-overlay-text">PLAYER 2 TURN</h1></div></div>
+    <div id="overlay-p2" class="overlay overlay-active"><div class="flex-center" style="height: 100%;"><h1 id="p2-overlay-text">PLAYER 1 TURN</h1></div></div>
 
 </body>
 
