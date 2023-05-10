@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .chicken {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background-color: #ffd700;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .body {
+      width: 160px;
+      height: 160px;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background-color: #ffd700;
+      border-radius: 50%;
+    }
+
+    .head {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #ffd700;
+      border-radius: 50%;
+    }
+
+    .beak {
+      width: 20px;
+      height: 40px;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      background-color: #ff6a00;
+      transform-origin: bottom left;
+      transform: rotate(45deg);
+    }
+
+    .eye {
+      width: 12px;
+      height: 12px;
+      background-color: black;
+      border-radius: 50%;
+      position: absolute;
+      top: 20px;
+      right: 10px;
+    }
+
+    .wing {
+      width: 100px;
+      height: 80px;
+      background-color: #ffd700;
+      position: absolute;
+      top: 50px;
+      left: -20px;
+      transform: rotate(-45deg);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="chicken">
+    <div class="body"></div>
+    <div class="head">
+      <div class="beak"></div>
+      <div class="eye"></div>
+    </div>
+    <div class="wing"></div>
+  </div>
+</body>
+</html>

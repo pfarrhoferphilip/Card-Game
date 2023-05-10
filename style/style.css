@@ -411,11 +411,40 @@ body {
     filter: drop-shadow(10px 10px 4px #14a02e);
 }
 
+#ability-display-p1 {
+    position: absolute;
+    left: 43.5vw;
+    bottom: 30vh;
+}
+
+#ability-display-p2 {
+    position: absolute;
+    left: 43.5vw;
+    top: 30vh;
+}
+
 /*CLASS*/
 .game-flex {
     display: flex;
     width: 80vw;
     height: 25vh;
+}
+
+.ability-display {
+    transform: scale(0%);
+    text-align: center;
+    z-index: 5;
+    font-size: 50%;
+    width: 13%;
+    background-color: #452a1b88;
+    color: #EFDD91;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+}
+
+.ability-display-active {
+    opacity: 1;
+    transform: scale(100%);
 }
 
 .noselect {
@@ -480,7 +509,7 @@ body {
 }
 
 .deck-right {
-    width: 13,125%;
+    width: 13, 125%;
     height: 20%;
     position: fixed;
     right: -20vw;
@@ -488,7 +517,7 @@ body {
 }
 
 .deck-left {
-    width: 13,125%;
+    width: 13, 125%;
     height: 20%;
     position: fixed;
     left: -20vw;

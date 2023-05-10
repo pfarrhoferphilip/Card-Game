@@ -35,6 +35,8 @@ var r = document.querySelector(':root');
 let p1_name;
 let p2_name;
 let game_is_over = false;
+let ability_display_p1;
+let ability_display_p2;
 
 startGame();
 function startGame() {
@@ -51,6 +53,8 @@ function startGame() {
     p2_overlay = document.getElementById("overlay-p2");
     p1_remove = document.getElementById("remove-p1");
     p2_remove = document.getElementById("remove-p2")
+    ability_display_p1 = document.getElementById("ability-display-p1");
+    ability_display_p2 = document.getElementById("ability-display-p2");
     r.style.setProperty('--p1_color', localStorage['p1_color']);
     r.style.setProperty('--p2_color', localStorage['p2_color']);
     p1_name = localStorage['p1_name'];
@@ -69,7 +73,91 @@ function startGame() {
         scores = [0];
     }
 
+    let date = new Date();
+    if (date.getHours() > 20) {
+        console.log("LATE NIGHT GAMING???");
+    }
+
     dealCardsOnHand(1);
+}
+
+function applyPoison() {
+    for (let i = 0; i < p1_actives.length; i++) {
+        if (p1_actives[i].poison == true && p1_actives[i].hp > 1) {
+            damageCard(1, i, 1, false);
+        }
+    }
+
+    for (let i = 0; i < p2_actives.length; i++) {
+        if (p2_actives[i].poison == true && p2_actives[i].hp > 1) {
+            damageCard(2, i, 1, false);
+        }
+    }
+}
+
+function poisonCard(player, slot) {
+    if (player == 1) {
+        p1_actives[slot].poison = true;
+    } else {
+        p2_actives[slot].poison = true;
+    }
+}
+
+function applyEffect(player, active_slot) {
+    console.log("AMOGUS");
+    if (player == 1) {
+
+        if (p1_actives[active_slot].effect.heal_self != 0) {
+            p1_actives[active_slot].hp += p1_actives[active_slot].effect.heal_self;
+        }
+
+        if (p1_actives[active_slot].effect.heal_all != 0) {
+            console.log("heal_all");
+            for (let i = 0; i < p1_actives.length; i++) {
+                if (p1_actives[i].name != "empty") {
+                    p1_actives[i].hp += p1_actives[active_slot].effect.heal_all;
+                    console.log("healing...");
+                }
+            }
+        }
+
+        if (p1_actives[active_slot].effect.dmg_single != 0) {
+            if (p2_actives[active_slot].name != "empty")
+                damageCard(2, active_slot, p1_actives[active_slot].effect.dmg_single);
+        }
+
+        if (p1_actives[active_slot].effect.poisonous != 0) {
+            if (p2_actives[active_slot].name != "empty")
+                poisonCard(2, active_slot);
+        }
+    } else {
+
+        if (p2_actives[active_slot].effect.heal_self != 0) {
+            p2_actives[active_slot].hp += p2_actives[active_slot].effect.heal_self;
+        }
+
+        if (p2_actives[active_slot].effect.heal_all != 0) {
+            for (let i = 0; i < p2_actives.length; i++) {
+                if (p2_actives[i].name != "empty") {
+                    p2_actives[i].hp += p2_actives[active_slot].effect.heal_all;
+                }
+            }
+        }
+
+        if (p2_actives[active_slot].effect.dmg_single != 0) {
+            if (p1_actives[active_slot].name != "empty")
+                damageCard(1, active_slot, p1_actives[active_slot].effect.dmg_single);
+        }
+
+        if (p2_actives[active_slot].effect.poisonous != 0) {
+            if (p1_actives[active_slot].name != "empty")
+                poisonCard(1, active_slot);
+        }
+    }
+
+    removeDeadCards();
+    updateCardsOnActives(1);
+    updateCardsOnActives(2);
 }
 
 function endGame(winner) {
@@ -174,6 +262,8 @@ function realRemoveCard(player) {
     }
 
     curr_selected_card = null;
+    ability_display_p1.classList.remove("ability-display-active");
+    ability_display_p2.classList.remove("ability-display-active");
 }
 
 function healPlayer(player, heal) {
@@ -253,6 +343,11 @@ function startAttacks() {
                 } else {
                     p1_actives[i].turns_till_active -= 1;
                 }
+
+                //POISON
+                if (p1_actives[i].effect && p1_actives[i].effect.poisonous == 1) {
+                    poisonCard(2, i);
+                }
             } else {
                 if (p1_actives[i].turns_till_active == 0) {
                     damagePlayer(2, p1_actives[i].dmg);
@@ -270,6 +365,11 @@ function startAttacks() {
                     damageCard(1, i, p2_actives[i].dmg, false);
                 } else {
                     p2_actives[i].turns_till_active -= 1;
+                }
+
+                //POISON
+                if (p2_actives[i].effect && p2_actives[i].effect.poisonous == 1) {
+                    poisonCard(1, i);
                 }
             } else {
                 if (p2_actives[i].turns_till_active == 0) {
@@ -289,6 +389,8 @@ function endTurn() {
     if (curr_selected_card != null) {
         curr_selected_card_element.id = "";
         curr_selected_card = null;
+        ability_display_p1.classList.remove("ability-display-active");
+        ability_display_p2.classList.remove("ability-display-active");
         if (p1_turn) {
             p2_remove.classList.remove("glow");
         } else {
@@ -314,6 +416,7 @@ function endTurn() {
     //if (turn_count > 0) {
     //    startAttacks();
     //}
+    applyPoison();
     turn_count++;
     document.title = `TURN ${turn_count}: WILDLIFE WARRIORS`;
 }
@@ -382,26 +485,50 @@ function updateCardsOnActives(player) {
     for (let i = 0; i < current_actives.length; i++) {
         if (current_actives[i].name !== "empty") {
             if (current_actives[i].turns_till_active == 0 && current_actives[i].is_grey == false) {
-                current_actives_e[i].outerHTML = `
+                if (current_actives[i].poison == false) {
+                    current_actives_e[i].outerHTML = `
 
-            <div class="active-card-game-actives p${player}_actives">
-                <h1 class="active-name-game">${current_actives[i].name}</h1>
-                <div class="flex-center">
-                    <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
-                </div>
-                <div class="flex-center">
-                    <div class="flex-center-no-width">
-                        <img class="active-icon-game" src="../img/heartIcon.png">
-                        <h2 class="">${current_actives[i].hp}</h2>
+                    <div class="active-card-game-actives p${player}_actives">
+                        <h1 class="active-name-game">${current_actives[i].name}</h1>
+                        <div class="flex-center">
+                            <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
+                        </div>
+                        <div class="flex-center">
+                            <div class="flex-center-no-width">
+                                <img class="active-icon-game" src="../img/heartIcon.png">
+                                <h2 class="">${current_actives[i].hp}</h2>
+                            </div>
+                            <div class="flex-center-no-width">
+                                <h2 class="">${current_actives[i].dmg}</h2>
+                                <img class="active-icon-game" src="../img/swordIcon.png">
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex-center-no-width">
-                        <h2 class="">${current_actives[i].dmg}</h2>
-                        <img class="active-icon-game" src="../img/swordIcon.png">
-                    </div>
-                </div>
-            </div>
+                    `;
+                } else {
+                    current_actives_e[i].outerHTML = `
 
-        `;
+                    <div class="active-card-game-actives p${player}_actives">
+                        <h1 style="color: #14a02e;" class="active-name-game">${current_actives[i].name}</h1>
+                        <div class="flex-center">
+                            <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
+                        </div>
+                        <div class="flex-center">
+                            <div class="flex-center-no-width">
+                                <img class="active-icon-game" src="../img/heartIcon.png">
+                                <h2 class="">${current_actives[i].hp}</h2>
+                            </div>
+                            <div class="flex-center-no-width">
+                                <h2 class="">${current_actives[i].dmg}</h2>
+                                <img class="active-icon-game" src="../img/swordIcon.png">
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+
+
+
             } else {
                 current_actives_e[i].outerHTML = `
 
@@ -475,9 +602,20 @@ function placeCardOnActive(player, card, active_slot) {
                 p2_orbs -= curr_selected_card.cost;
             }
 
+            console.log(curr_selected_card);
+
+            if (curr_selected_card.effect) {
+                if (curr_selected_card.effect.active_on_place) {
+                    applyEffect(player, active_slot);
+                    console.log(curr_selected_card.effect.active_on_place);
+                }
+            }
+
 
             curr_selected_card = null;
             curr_selected_hand_slot = null;
+            ability_display_p1.classList.remove("ability-display-active");
+            ability_display_p2.classList.remove("ability-display-active");
 
             updateCardsOnHand(player);
             updateCardsOnActives(player);
@@ -505,6 +643,15 @@ function selectCard(player, slot) {
             curr_selected_card_element = p1_hand_element[slot];
             letElementsGlow(p1_actives_element);
             p1_remove.classList.add("glow");
+            if (curr_selected_card.effect) {
+                ability_display_p1.classList.add("ability-display-active");
+                ability_display_p1.innerHTML = `
+                    <h1>${curr_selected_card.effect.name}</h1>
+                    <p>${curr_selected_card.effect.description}</p>
+                `
+            } else {
+                ability_display_p1.classList.remove("ability-display-active");
+            }
         }
     } else if (player == 2 && p1_turn == false) {
         if (p2_orbs >= p2_hand[slot].cost) {
@@ -513,6 +660,15 @@ function selectCard(player, slot) {
             curr_selected_card_element = p2_hand_element[slot];
             letElementsGlow(p2_actives_element);
             p2_remove.classList.add("glow");
+            if (curr_selected_card.effect) {
+                ability_display_p2.classList.add("ability-display-active");
+                ability_display_p2.innerHTML = `
+                    <h1>${curr_selected_card.effect.name}</h1>
+                    <p>${curr_selected_card.effect.description}</p>
+                `
+            } else {
+                ability_display_p2.classList.remove("ability-display-active");
+            }
         }
     }
 

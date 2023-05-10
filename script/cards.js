@@ -9,7 +9,9 @@ let card01 = {
     "cost": 2,
     "sprite": "cow01.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "effect": poisonous,
+    "poison": false
 }
 let card02 = {
     "name": "COCO COW",
@@ -18,7 +20,9 @@ let card02 = {
     "cost": 2,
     "sprite": "cow02.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "effect": test_effect,
+    "poison": false
 }
 let card03 = {
     "name": "BULL",
@@ -27,7 +31,8 @@ let card03 = {
     "cost": 4,
     "sprite": "bull.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "poison": false
 }
 let card04 = {
     "name": "CROCODILE",
@@ -36,7 +41,8 @@ let card04 = {
     "cost": 6,
     "sprite": "crocodile.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "poison": false
 }
 let card05 = {
     "name": "GOAT",
@@ -45,7 +51,8 @@ let card05 = {
     "cost": 1,
     "sprite": "goat.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "poison": false
 }
 let card06 = {
     "name": "UNICORN",
@@ -54,7 +61,8 @@ let card06 = {
     "cost": 1,
     "sprite": "unicorn.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "poison": false
 }
 let card07 = {
     "name": "TURTLE",
@@ -63,7 +71,8 @@ let card07 = {
     "cost": 3,
     "sprite": "turtle.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "poison": false
 }
 let card08 = {
     "name": "SHEEP",
@@ -72,7 +81,8 @@ let card08 = {
     "cost": 3,
     "sprite": "sheep.png",
     "turns_till_active": 1,
-    "is_grey": true
+    "is_grey": true,
+    "poison": false
 }
 
 let cards = [card01, card02, card03, card04, card05, card06, card07, card08];
