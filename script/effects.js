@@ -4,7 +4,8 @@ let test_effect = {
     "active_on_place": true,
     "heal_self": 0,
     "heal_all": 0,
-    "dmg_single": 1
+    "dmg_single": 1,
+    "poisonous": 0
 }
 
 let healing_milk = {
@@ -13,7 +14,8 @@ let healing_milk = {
     "active_on_place": true,
     "heal_self": 0,
     "heal_all": 1,
-    "dmg_single": 0
+    "dmg_single": 0,
+    "poisonous": 0
 }
 
 let poisonous = {

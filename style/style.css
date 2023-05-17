@@ -106,6 +106,18 @@ body {
     }
 }
 
+@keyframes attack-p1 {
+    0% {
+        transform: translateY(0vh);
+    }
+    50% {
+        transform: translateY(-10vh);
+    }
+    100% {
+        transform: translateY(0vh);
+    }
+}
+
 /*ID*/
 #how-to-body {
     padding: 2vw;
@@ -353,6 +365,10 @@ body {
     transform: translateY(0vh);
 }
 
+#no-turn {
+    opacity: 0;
+}
+
 #orbs-p1 {
     position: absolute;
     bottom: 20%;
@@ -428,6 +444,11 @@ body {
     display: flex;
     width: 80vw;
     height: 25vh;
+}
+
+.attacking-card-p1 {
+    position: relative;
+    animation: attack-p1 0.5s ease-in-out;
 }
 
 .ability-display {

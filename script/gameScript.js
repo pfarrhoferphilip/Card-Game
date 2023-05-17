@@ -14,7 +14,7 @@ let curr_selected_hand_slot;
 let curr_selected_card_element;
 let end_turn_button;
 let p1_orbs = 0;
-let p2_orbs = 0;
+let p2_orbs = 2;
 let p1_orbs_gain = 3;
 let p2_orbs_gain = 3;
 let p1_orbs_element;
@@ -109,6 +109,8 @@ function applyEffect(player, active_slot) {
 
         if (p1_actives[active_slot].effect.heal_self != 0) {
             p1_actives[active_slot].hp += p1_actives[active_slot].effect.heal_self;
+            if (p1_actives[active_slot].hp > p1_actives[active_slot].max_hp)
+                p1_actives[active_slot].hp = p1_actives[active_slot].max_hp;
         }
 
         if (p1_actives[active_slot].effect.heal_all != 0) {
@@ -116,7 +118,8 @@ function applyEffect(player, active_slot) {
             for (let i = 0; i < p1_actives.length; i++) {
                 if (p1_actives[i].name != "empty") {
                     p1_actives[i].hp += p1_actives[active_slot].effect.heal_all;
-                    console.log("healing...");
+                    if (p1_actives[i].hp > p1_actives[i].max_hp)
+                        p1_actives[i].hp = p1_actives[i].max_hp;
                 }
             }
         }
@@ -124,11 +127,6 @@ function applyEffect(player, active_slot) {
         if (p1_actives[active_slot].effect.dmg_single != 0) {
             if (p2_actives[active_slot].name != "empty")
                 damageCard(2, active_slot, p1_actives[active_slot].effect.dmg_single);
-        }
-
-        if (p1_actives[active_slot].effect.poisonous != 0) {
-            if (p2_actives[active_slot].name != "empty")
-                poisonCard(2, active_slot);
         }
     } else {
 
@@ -147,11 +145,6 @@ function applyEffect(player, active_slot) {
         if (p2_actives[active_slot].effect.dmg_single != 0) {
             if (p1_actives[active_slot].name != "empty")
                 damageCard(1, active_slot, p1_actives[active_slot].effect.dmg_single);
-        }
-
-        if (p2_actives[active_slot].effect.poisonous != 0) {
-            if (p1_actives[active_slot].name != "empty")
-                poisonCard(1, active_slot);
         }
     }
 
@@ -385,6 +378,14 @@ function startAttacks() {
 }
 
 function endTurn() {
+
+    for (let i = 0; i < p1_actives.length; i++) {
+        if (p1_actives[i].turns_till_active == 0) {
+            console.log("ANIM")
+            p1_actives_element[i].classList.add("attacking-card-p1");
+        }
+    }
+
     p1_turn = !p1_turn;
     if (curr_selected_card != null) {
         curr_selected_card_element.id = "";
@@ -397,28 +398,42 @@ function endTurn() {
             p1_remove.classList.remove("glow");
         }
     }
-    checkActiveStatus(1);
-    checkActiveStatus(2);
-    startAttacks();
 
     if (p1_turn == true) {
-        end_turn_button.id = "end-turn-button-p1";
+        end_turn_button.id = "no-button";
         p1_overlay.classList.remove("overlay-active");
-        p2_overlay.classList.add("overlay-active");
-        dealCardsOnHand(1);
     } else {
-        end_turn_button.id = "end-turn-button-p2";
+        end_turn_button.id = "no-button";
         p2_overlay.classList.remove("overlay-active");
-        p1_overlay.classList.add("overlay-active");
-        dealCardsOnHand(2);
     }
 
-    //if (turn_count > 0) {
-    //    startAttacks();
-    //}
-    applyPoison();
-    turn_count++;
-    document.title = `TURN ${turn_count}: WILDLIFE WARRIORS`;
+    setTimeout(() => {
+
+        if (p1_turn == true) {
+            end_turn_button.id = "end-turn-button-p1";
+            p2_overlay.classList.add("overlay-active");
+            dealCardsOnHand(1);
+        } else {
+            end_turn_button.id = "end-turn-button-p2";
+            p1_overlay.classList.add("overlay-active");
+            dealCardsOnHand(2);
+        }
+
+
+        checkActiveStatus(1);
+        checkActiveStatus(2);
+        startAttacks();
+
+
+
+        //if (turn_count > 0) {
+        //    startAttacks();
+        //}
+        applyPoison();
+        turn_count++;
+        document.title = `TURN ${turn_count}: WILDLIFE WARRIORS`;
+
+    }, 500);
 }
 
 function placeSpecificCardOnActives(player, active_id, card) {
@@ -466,6 +481,9 @@ function damageCard(player, slot, damage, is_counter_damage) {
     //if (is_counter_damage == false) {
     //    damageCard(other_player, slot, p2_actives[slot].damage, true);
     //}
+
+    if (current_card.effect && current_card.effect.poisonous != 0)
+        poisonCard(other_player, slot);
 
     console.log(`dealt ${damage} damage to Player ${player} slot ${slot}`);
 }
@@ -530,26 +548,49 @@ function updateCardsOnActives(player) {
 
 
             } else {
-                current_actives_e[i].outerHTML = `
+                if (current_actives[i].poison == false) {
+                    current_actives_e[i].outerHTML = `
 
-            <div class="active-card-game-actives p${player}_actives opacity-low">
-                <h1 class="active-name-game">${current_actives[i].name}</h1>
-                <div class="flex-center">
-                    <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
-                </div>
-                <div class="flex-center">
-                    <div class="flex-center-no-width">
-                        <img class="active-icon-game" src="../img/heartIcon.png">
-                        <h2 class="">${current_actives[i].hp}</h2>
-                    </div>
-                    <div class="flex-center-no-width">
-                        <h2 class="">${current_actives[i].dmg}</h2>
-                        <img class="active-icon-game" src="../img/swordIcon.png">
-                    </div>
-                </div>
-            </div>
+                        <div class="active-card-game-actives p${player}_actives opacity-low">
+                            <h1 class="active-name-game">${current_actives[i].name}</h1>
+                            <div class="flex-center">
+                                <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
+                            </div>
+                            <div class="flex-center">
+                                <div class="flex-center-no-width">
+                                    <img class="active-icon-game" src="../img/heartIcon.png">
+                                    <h2 class="">${current_actives[i].hp}</h2>
+                                </div>
+                                <div class="flex-center-no-width">
+                                    <h2 class="">${current_actives[i].dmg}</h2>
+                                    <img class="active-icon-game" src="../img/swordIcon.png">
+                                </div>
+                            </div>
+                        </div>
 
-        `;
+                    `;
+                } else {
+                    current_actives_e[i].outerHTML = `
+                    <div class="active-card-game-actives p${player}_actives opacity-low">
+                            <h1 style="color: #14a02e;" class="active-name-game">${current_actives[i].name}</h1>
+                            <div class="flex-center">
+                                <img class="active-sprite-game" src="../img/cards/${current_actives[i].sprite}" alt="${current_actives[i].name}">
+                            </div>
+                            <div class="flex-center">
+                                <div class="flex-center-no-width">
+                                    <img class="active-icon-game" src="../img/heartIcon.png">
+                                    <h2 class="">${current_actives[i].hp}</h2>
+                                </div>
+                                <div class="flex-center-no-width">
+                                    <h2 class="">${current_actives[i].dmg}</h2>
+                                    <img class="active-icon-game" src="../img/swordIcon.png">
+                                </div>
+                            </div>
+                        </div>
+
+                    `;
+                }
+
             }
 
         } else {
