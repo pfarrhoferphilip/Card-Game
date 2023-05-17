@@ -106,18 +106,6 @@ body {
     }
 }
 
-@keyframes attack-p1 {
-    0% {
-        transform: translateY(0vh);
-    }
-    50% {
-        transform: translateY(-10vh);
-    }
-    100% {
-        transform: translateY(0vh);
-    }
-}
-
 /*ID*/
 #how-to-body {
     padding: 2vw;
@@ -446,9 +434,38 @@ body {
     height: 25vh;
 }
 
+@keyframes attack-p1 {
+    0% {
+        transform: translateY(0vh);
+    }
+    50% {
+        transform: translateY(-10vh);
+    }
+    100% {
+        transform: translateY(0vh);
+    }
+}
+
+@keyframes attack-p2 {
+    0% {
+        transform: translateY(0vh);
+    }
+    50% {
+        transform: translateY(10vh);
+    }
+    100% {
+        transform: translateY(0vh);
+    }
+}
+
 .attacking-card-p1 {
     position: relative;
     animation: attack-p1 0.5s ease-in-out;
+}
+
+.attacking-card-p2 {
+    position: relative;
+    animation: attack-p2 0.5s ease-in-out;
 }
 
 .ability-display {

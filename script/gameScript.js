@@ -132,12 +132,16 @@ function applyEffect(player, active_slot) {
 
         if (p2_actives[active_slot].effect.heal_self != 0) {
             p2_actives[active_slot].hp += p2_actives[active_slot].effect.heal_self;
+            if (p2_actives[active_slot].hp > p2_actives[active_slot].max_hp)
+                        p2_actives[active_slot].hp = p2_actives[active_slot].max_hp;
         }
 
         if (p2_actives[active_slot].effect.heal_all != 0) {
             for (let i = 0; i < p2_actives.length; i++) {
                 if (p2_actives[i].name != "empty") {
                     p2_actives[i].hp += p2_actives[active_slot].effect.heal_all;
+                    if (p2_actives[i].hp > p2_actives[i].max_hp)
+                        p2_actives[i].hp = p2_actives[i].max_hp;
                 }
             }
         }
@@ -333,13 +337,12 @@ function startAttacks() {
             if (p2_actives[i].name !== "empty") {
                 if (p1_actives[i].turns_till_active == 0) {
                     damageCard(2, i, p1_actives[i].dmg, false);
+                    //POISON
+                    if (p1_actives[i].effect && p1_actives[i].effect.poisonous == 1) {
+                        poisonCard(2, i);
+                    }
                 } else {
                     p1_actives[i].turns_till_active -= 1;
-                }
-
-                //POISON
-                if (p1_actives[i].effect && p1_actives[i].effect.poisonous == 1) {
-                    poisonCard(2, i);
                 }
             } else {
                 if (p1_actives[i].turns_till_active == 0) {
@@ -356,14 +359,15 @@ function startAttacks() {
             if (p1_actives[i].name !== "empty") {
                 if (p2_actives[i].turns_till_active == 0) {
                     damageCard(1, i, p2_actives[i].dmg, false);
+                    //POISON
+                    if (p2_actives[i].effect && p2_actives[i].effect.poisonous == 1) {
+                        poisonCard(1, i);
+                    }
                 } else {
                     p2_actives[i].turns_till_active -= 1;
                 }
 
-                //POISON
-                if (p2_actives[i].effect && p2_actives[i].effect.poisonous == 1) {
-                    poisonCard(1, i);
-                }
+
             } else {
                 if (p2_actives[i].turns_till_active == 0) {
                     damagePlayer(1, p2_actives[i].dmg);
@@ -383,6 +387,13 @@ function endTurn() {
         if (p1_actives[i].turns_till_active == 0) {
             console.log("ANIM")
             p1_actives_element[i].classList.add("attacking-card-p1");
+        }
+    }
+
+    for (let i = 0; i < p2_actives.length; i++) {
+        if (p2_actives[i].turns_till_active == 0) {
+            console.log("ANIM")
+            p2_actives_element[i].classList.add("attacking-card-p2");
         }
     }
 
@@ -482,8 +493,8 @@ function damageCard(player, slot, damage, is_counter_damage) {
     //    damageCard(other_player, slot, p2_actives[slot].damage, true);
     //}
 
-    if (current_card.effect && current_card.effect.poisonous != 0)
-        poisonCard(other_player, slot);
+    //if (current_card.effect && current_card.effect.poisonous != 0)
+    //    poisonCard(other_player, slot);
 
     console.log(`dealt ${damage} damage to Player ${player} slot ${slot}`);
 }
@@ -740,7 +751,7 @@ function removeCardOnHand(player, hand_id) {
     placeSpecificCardOnHand(player, hand_id, no_card);
 }
 
-function chooseRandomDeckCard(player) {
+function chooseRandomDeckCard(player, slot) {
     let current_deck;
     let random_card;
     if (player == 1) {
@@ -750,7 +761,7 @@ function chooseRandomDeckCard(player) {
     }
 
     random_card = Math.floor(Math.random() * current_deck.length);
-    if (turn_count > 0) {
+    if (turn_count > 0 || slot != 0) {
         return random_card;
     } else {
         if (cards[random_card].cost <= 3) {
@@ -779,7 +790,7 @@ function dealCardsOnHand(player) {
 
     for (let i = 0; i < current_hand.length; i++) {
         if (current_hand[i].name === "empty") {
-            placeCardOnHand(player, chooseRandomDeckCard(player));
+            placeCardOnHand(player, chooseRandomDeckCard(player, i));
         }
     }
     updateCardsOnHand(player);

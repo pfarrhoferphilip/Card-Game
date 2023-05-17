@@ -93,5 +93,17 @@ let card08 = {
     "is_grey": true,
     "poison": false
 }
+let card09 = {
+    "name": "SNAKE",
+    "hp": 4,
+    "max_hp": 4,
+    "dmg": 2,
+    "cost": 4,
+    "sprite": "snake.png",
+    "turns_till_active": 1,
+    "is_grey": true,
+    "poison": false,
+    "effect": poisonous
+}
 
-let cards = [card01, card02, card03, card04, card05, card06, card07, card08];
+let cards = [card01, card02, card03, card04, card05, card06, card07, card08, card09];
