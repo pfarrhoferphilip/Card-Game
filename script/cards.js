@@ -34,7 +34,7 @@ let card03 = {
     "sprite": "bull.png",
     "turns_till_active": 1,
     "is_grey": true,
-    "effect": test_effect,
+    "effect": insta_damage,
     "poison": false
 }
 let card04 = {
@@ -105,5 +105,17 @@ let card09 = {
     "poison": false,
     "effect": poisonous
 }
+let card10 = {
+    "name": "ORB MINE",
+    "hp": 6,
+    "max_hp": 6,
+    "dmg": 0,
+    "cost": 3,
+    "sprite": "mine.png",
+    "turns_till_active": 0,
+    "is_grey": false,
+    "poison": false,
+    "effect": produce_orbs
+}
 
-let cards = [card01, card02, card03, card04, card05, card06, card07, card08, card09];
+let card_pack1 = [card01, card02, card03, card04, card05, card06, card07, card08, card09, card10];

@@ -18,6 +18,14 @@ body {
     font-family: pixel;
 }
 
+tr {
+    transition: all 0.2s ease-out;
+}
+
+tr:hover {
+    background-color: black;
+}
+
 .flex-center {
     width: 100%;
     display: flex;
@@ -48,7 +56,7 @@ body {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    height: 60vh;
+    height: 50vh;
 }
 
 .text-center {
@@ -458,6 +466,18 @@ body {
     }
 }
 
+@keyframes produce {
+    0% {
+        transform: scale(100%);
+    }
+    50% {
+        transform: scale(110%);
+    }
+    100% {
+        transform: scale(100%);
+    }
+}
+
 .attacking-card-p1 {
     position: relative;
     animation: attack-p1 0.5s ease-in-out;
@@ -466,6 +486,11 @@ body {
 .attacking-card-p2 {
     position: relative;
     animation: attack-p2 0.5s ease-in-out;
+}
+
+.produce-orbs-anim {
+    position: relative;
+    animation: produce 0.5s ease-in-out;
 }
 
 .ability-display {
@@ -715,6 +740,11 @@ input {
     cursor: pointer;
     filter: drop-shadow(0.0vh 0.0vh 0px #59c135);
     transform: translateY(0vh);
+}
+
+#menu-button {
+    border-radius: 5%;
+    width: 80vw;
 }
 
 .play-again-button {

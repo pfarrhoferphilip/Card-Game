@@ -6,8 +6,8 @@ let p1_hand = [no_card, no_card, no_card, no_card, no_card];
 let p2_hand = [no_card, no_card, no_card, no_card, no_card];
 let p1_actives = [no_card, no_card, no_card, no_card];
 let p2_actives = [no_card, no_card, no_card, no_card];
-let p1_deck = cards;
-let p2_deck = cards;
+let p1_deck;
+let p2_deck;
 let p1_turn = true;
 let curr_selected_card;
 let curr_selected_hand_slot;
@@ -28,8 +28,6 @@ let p2_hp_element;
 let p1_overlay;
 let p2_overlay;
 let turn_count = 0;
-let p1_remove;
-let p2_remove;
 let scores;
 var r = document.querySelector(':root');
 let p1_name;
@@ -37,6 +35,7 @@ let p2_name;
 let game_is_over = false;
 let ability_display_p1;
 let ability_display_p2;
+let cards = [];
 
 startGame();
 function startGame() {
@@ -51,14 +50,14 @@ function startGame() {
     p2_hp_element = document.getElementById("hp_p2_count");
     p1_overlay = document.getElementById("overlay-p1");
     p2_overlay = document.getElementById("overlay-p2");
-    p1_remove = document.getElementById("remove-p1");
-    p2_remove = document.getElementById("remove-p2")
     ability_display_p1 = document.getElementById("ability-display-p1");
     ability_display_p2 = document.getElementById("ability-display-p2");
     r.style.setProperty('--p1_color', localStorage['p1_color']);
     r.style.setProperty('--p2_color', localStorage['p2_color']);
     p1_name = localStorage['p1_name'];
     p2_name = localStorage['p2_name'];
+
+
 
     p1_orbs_element.innerHTML = p1_orbs;
     p2_orbs_element.innerHTML = p2_orbs;
@@ -78,7 +77,34 @@ function startGame() {
         console.log("LATE NIGHT GAMING???");
     }
 
+    cards = card_pack1;
+    p1_deck = cards;
+    p2_deck = cards;
+
     dealCardsOnHand(1);
+}
+
+function goat() {
+    placeCardOnAllHandSlots(1, card05);
+    placeCardOnAllHandSlots(2, card05);
+    placeCardOnAllActiveSlots(1, card05);
+    placeCardOnAllActiveSlots(2, card05);
+
+    for (let i = 0; i < 10000; i++) {
+        console.log(i + "GOAT");
+    }
+}
+
+function placeCardOnAllActiveSlots(player, card_to_place) {
+    for (let i = 0; i < p1_actives.length; i++) {
+        placeSpecificCardOnActives(player, i, card_to_place);
+    }
+}
+
+function placeCardOnAllHandSlots(player, card_to_place) {
+    for (let i = 0; i < p1_hand.length; i++) {
+        placeSpecificCardOnHand(player, i, card_to_place);
+    }
 }
 
 function applyPoison() {
@@ -133,7 +159,7 @@ function applyEffect(player, active_slot) {
         if (p2_actives[active_slot].effect.heal_self != 0) {
             p2_actives[active_slot].hp += p2_actives[active_slot].effect.heal_self;
             if (p2_actives[active_slot].hp > p2_actives[active_slot].max_hp)
-                        p2_actives[active_slot].hp = p2_actives[active_slot].max_hp;
+                p2_actives[active_slot].hp = p2_actives[active_slot].max_hp;
         }
 
         if (p2_actives[active_slot].effect.heal_all != 0) {
@@ -249,13 +275,11 @@ function realRemoveCard(player) {
         for (let i = 0; i < p1_actives_element.length; i++) {
             p1_actives_element[i].classList.remove("glow");
         }
-        p1_remove.classList.remove("glow");
     } else {
         p2_hand[curr_selected_hand_slot] = no_card;
         for (let i = 0; i < p2_actives_element.length; i++) {
             p2_actives_element[i].classList.remove("glow");
         }
-        p2_remove.classList.remove("glow");
     }
 
     curr_selected_card = null;
@@ -334,6 +358,13 @@ function removeDeadCards() {
 function startAttacks() {
     for (let i = 0; i < p1_actives.length; i++) {
         if (p1_actives[i].name !== "empty") {
+            //ORB PRODUCE
+            if (p1_actives[i].effect && p1_actives[i].effect.produce_orbs != 0) {
+                p1_orbs += 1;
+                if (p1_orbs > max_orbs)
+                    p1_orbs = max_orbs;
+                p1_orbs_element.innerHTML = p1_orbs;
+            }
             if (p2_actives[i].name !== "empty") {
                 if (p1_actives[i].turns_till_active == 0) {
                     damageCard(2, i, p1_actives[i].dmg, false);
@@ -356,6 +387,13 @@ function startAttacks() {
 
     for (let i = 0; i < p2_actives.length; i++) {
         if (p2_actives[i].name !== "empty") {
+            //ORB PRODUCE
+            if (p2_actives[i].effect && p2_actives[i].effect.produce_orbs != 0) {
+                p2_orbs += 1;
+                if (p2_orbs > max_orbs)
+                    p2_orbs = max_orbs;
+                p2_orbs_element.innerHTML = p2_orbs;
+            }
             if (p1_actives[i].name !== "empty") {
                 if (p2_actives[i].turns_till_active == 0) {
                     damageCard(1, i, p2_actives[i].dmg, false);
@@ -385,15 +423,23 @@ function endTurn() {
 
     for (let i = 0; i < p1_actives.length; i++) {
         if (p1_actives[i].turns_till_active == 0) {
-            console.log("ANIM")
-            p1_actives_element[i].classList.add("attacking-card-p1");
+            if (p1_actives[i].dmg > 0) {
+                console.log("ANIM")
+                p1_actives_element[i].classList.add("attacking-card-p1");
+            }
+            if (p1_actives[i].effect && p1_actives[i].effect.produce_orbs != 0)
+                p1_actives_element[i].classList.add("produce-orbs-anim");
         }
     }
 
     for (let i = 0; i < p2_actives.length; i++) {
         if (p2_actives[i].turns_till_active == 0) {
-            console.log("ANIM")
-            p2_actives_element[i].classList.add("attacking-card-p2");
+            if (p2_actives[i].dmg > 0) {
+                console.log("ANIM")
+                p2_actives_element[i].classList.add("attacking-card-p2");
+            }
+            if (p2_actives[i].effect && p2_actives[i].effect.produce_orbs != 0)
+                p2_actives_element[i].classList.add("produce-orbs-anim");
         }
     }
 
@@ -404,9 +450,7 @@ function endTurn() {
         ability_display_p1.classList.remove("ability-display-active");
         ability_display_p2.classList.remove("ability-display-active");
         if (p1_turn) {
-            p2_remove.classList.remove("glow");
         } else {
-            p1_remove.classList.remove("glow");
         }
     }
 
@@ -642,7 +686,6 @@ function placeCardOnActive(player, card, active_slot) {
                 for (let i = 0; i < p1_actives_element.length; i++) {
                     p1_actives_element[i].classList.remove("glow");
                 }
-                p1_remove.classList.remove("glow");
                 p1_orbs -= curr_selected_card.cost;
             } else {
                 p2_actives = current_actives;
@@ -650,7 +693,6 @@ function placeCardOnActive(player, card, active_slot) {
                 for (let i = 0; i < p2_actives_element.lengthq; i++) {
                     p2_actives_element[i].classList.remove("glow");
                 }
-                p2_remove.classList.remove("glow");
                 p2_orbs -= curr_selected_card.cost;
             }
 
@@ -694,7 +736,6 @@ function selectCard(player, slot) {
             curr_selected_hand_slot = slot;
             curr_selected_card_element = p1_hand_element[slot];
             letElementsGlow(p1_actives_element);
-            p1_remove.classList.add("glow");
             if (curr_selected_card.effect) {
                 ability_display_p1.classList.add("ability-display-active");
                 ability_display_p1.innerHTML = `
@@ -711,7 +752,6 @@ function selectCard(player, slot) {
             curr_selected_hand_slot = slot;
             curr_selected_card_element = p2_hand_element[slot];
             letElementsGlow(p2_actives_element);
-            p2_remove.classList.add("glow");
             if (curr_selected_card.effect) {
                 ability_display_p2.classList.add("ability-display-active");
                 ability_display_p2.innerHTML = `

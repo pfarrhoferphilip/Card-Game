@@ -42,4 +42,11 @@ function drawLeaderboard() {
     html_code += `</table>`;
     document.getElementById("leaderboard").innerHTML = html_code;
 
+    anime({
+        targets: 'tr',
+        translateX: 0,
+        rotate: '1turn',
+        duration: 800
+    });
+
 }

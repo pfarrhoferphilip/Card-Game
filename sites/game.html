@@ -10,11 +10,12 @@
     <link rel="shortcut icon" href="../img/cards/unicorn.png" type="image/x-icon">
     <script src="../script/effects.js"></script>
     <script src="../script/cards.js"></script>
+    <script src="../animejs/lib/anime.min.js"></script>
     <script src="../script/gameScript.js" defer></script>
 </head>
 
 <body id="game-body">
-    
+
     <!--P2 HAND-->
     <div class="flex-center">
         <div class="game-flex">
@@ -37,13 +38,13 @@
     </div>
 
     <!--P1 DECK-->
-    <div onclick="realRemoveCard(1)" id="remove-p1" class="card-background-game deck-right">
+    <!--<div onclick="realRemoveCard(1)" id="remove-p1" class="card-background-game deck-right">
         <h1>REMOVE</h1>
     </div>
-    <!--P2 DECK-->
+    P2 DECK
     <div onclick="realRemoveCard(2)" id="remove-p2" class="card-background-game deck-left">
         <h1>REMOVE</h1>
-    </div>
+    </div>-->
 
     <!--P2 ACTIVE-->
     <div class="flex-center game-margin">
@@ -83,12 +84,14 @@
     <!--ABILITY DISPLAYS-->
     <div id="ability-display-p1" class="ability-display">
         <h1>HEALING MILK</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua</p>
     </div>
 
     <div id="ability-display-p2" class="ability-display">
         <h1>HEALING MILK</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua</p>
     </div>
 
     <!--P1 HAND-->
@@ -149,8 +152,16 @@
     </div>
 
     <!--OVERLAYS-->
-    <div id="overlay-p1" class="overlay"><div class="flex-center" style="height: 100%;"><h1 id="p1-overlay-text">PLAYER 2 TURN</h1></div></div>
-    <div id="overlay-p2" class="overlay overlay-active"><div class="flex-center" style="height: 100%;"><h1 id="p2-overlay-text">PLAYER 1 TURN</h1></div></div>
+    <div id="overlay-p1" class="overlay">
+        <div class="flex-center" style="height: 100%;">
+            <h1 id="p1-overlay-text">PLAYER 2 TURN</h1>
+        </div>
+    </div>
+    <div id="overlay-p2" class="overlay overlay-active">
+        <div class="flex-center" style="height: 100%;">
+            <h1 id="p2-overlay-text">PLAYER 1 TURN</h1>
+        </div>
+    </div>
 
 </body>
 
